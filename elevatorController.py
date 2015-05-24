@@ -1,5 +1,6 @@
 from elevator import Elevator
 from request import Request 
+import time 
 
 class E_controller:
 	#clk = None
@@ -18,15 +19,19 @@ class E_controller:
 		print ("num of elevators: " + str(len(self.elevators)))
 	def pickElevator(self):
 		pass
-	def updateRequest(self, request):# while(True): doOneRequest, if end, take another interrupt
+	def enqRequest(self, request):# while(True): doOneRequest, if end, take another interrupt
 		#e = self.pickElevator()
 		pass
+	def updateOneClk(self):
+		for i in range(len(self.elevators)):
+			self.elevators[i].updateOneClk()
+		time.sleep(1)
 
 
 ############# MAIN() ##################
 e_controller = E_controller(2, 7)
-#elevator = Elevator(7)
 request1_in = Request(True, 0, [9,8,1])
 request2_ex = Request(False, 3, [1, 2])
-for i in range(len([1,2])):
-	print i
+#e_controller.enqRequest(request1_in)
+#e_controller.enqRequest(request2_ex)
+#e_controller.updateOneClk()

@@ -1,13 +1,14 @@
 class Request:
-	isInternalRequest = None #Internal/External
+	isInternalRequest = None #True: Internal, FalseExternal
 	clickedButtons = []   
 
 	''' if internal ''' 
-	whichElevator = None #0 , 1
-	# clickedButtons = {9(7th), 8,7,6,5,4, 3(1th),2(CLOSED),1(OPENED), 0(None)}
+	whichElevator = None #0 , 1 , .. (N-1)
+	# clickedButtons = {9(7th), 8,7,6,5,4, 3(1th),2(CLOSED),1(OPENED), 0(None??)}
+
 	''' if external '''
-	whichFloor = None # 1,2,3,4,5,6,7
-	# clickedButtons = {2(down),1(up), 0(None)}
+	whichFloor = None # 1,2,3,4,5,6,7, .. F
+	# clickedButtons = {2(down),1(up), 0(None??)}
 	def __init__(self, isInternalRequest, aux, clickedButtons):
 		self.isInternalRequest = isInternalRequest
 		self.clickedButtons = clickedButtons

@@ -1,12 +1,15 @@
 class Elevator:
-	isOpen = 0	# 0: closed, 1: opened
-	movingStatus = 0 # 0: stay, 1: down, 2: up 
+	isOpen = None	# 0: closed, 1: opened
+	movingStatus = None # 0: stay, 1: down, 2: up 
 	curFloor = None 
 	maxFloor = None
-	destinations = [] #stop and Open
+	destinations = None #stop by and open #>> STATIONS
 	def __init__(self, maxFloor):
 		self.curFloor = 1
 		self.maxFloor = maxFloor
+		self.movingStatus = 0
+		self.isOpen = 0
+		self.destinations = [] 
 		print "Elevator() init"
 	def __printPos(self):
 		print ">> "+str(self.curFloor) + " th floor"
@@ -39,10 +42,26 @@ class Elevator:
 		self.movingStatus = 0
 		self.openDoor()
 		self.closeDoor()
-	def insertDst(self, numFloor):
-		pass
-		#for i in range(len(destinations)):
-		#	if numFloor<destinations
+	def insertDst(self, newFloor):
+		print "insertDst, before: "+str(destinations)
+		if not destinations:
+			destinations.append(newFloor)
+		else :
+			if self.movingStatus == 1:
+				for i in range(len(self.destinations)):
+					if newFloor > self.destinations[i] :
+						self.destinations.insert(i, newFloor)
+						break
+					elif i == (len(self.destinations)-1):
+						dself.estinations.append(newFloor)
+			elif self.movingStatus == 2: 
+				for i in range(len(self.destinations)):
+					if newFloor < self.destinations[i] :
+						self.destinations.insert(i, newFloor)
+						break
+					elif i == (len(self.destinations)-1):
+						self.destinations.append(newFloor)
+		print "insertDst, after: "+str(destinations)
 	def openDoor(self):
 		isOpen = 1
 		print ".. door opened .."
@@ -53,7 +72,9 @@ class Elevator:
 		print ".. start from "+str(self.curFloor) + " th floor .."
 		self.startMoving(dstFloor)
 		self.endMoving()
-
+	def updateOneClk(self):
+		pass
+		#if destinations:
 
 ############# TEST MAIN() ##################
 
