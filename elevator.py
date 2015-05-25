@@ -62,20 +62,21 @@ class Elevator:
 			print msg+str(self.upperStations)+"/"+str(self.lowerStations)
 		elif self.movingStatus==sMoving.DOWN:
 			print msg+str(self.lowerStations)+"/"+str(self.upperStations)
-	def __insertInUpperStations(self, newFloor):
-		enqItemFreq(self.upperStations, newFloor)
-	def __insertInLowerStations(self, newFloor):
-		enqItemFreq(self.lowerStations, newFloor)
 	def insertDst(self, newFloor):
-		self.__printStations("before: ")
-		print str(self.movingStatus)
+		print "newFloor: "
+		print newFloor
+		self.__printStations(".. before: ")
 		if newFloor > self.curFloor:
-			print "upper"
-			self.__insertInUpperStations(newFloor)
+			if self.movingStatus==sMoving.STAY: #need?
+				self.movingStatus =sMoving.UP
+			print ".. added upperStation .."
+			enqItemFreq(self.upperStations, newFloor)
 		elif newFloor < self.curFloor:
-			print "lower"
-			self.__insertInLowerStations(newFloor)
-		self.__printStations("after: ")
+			if self.movingStatus==sMoving.STAY: #need?
+				self.movingStatus =sMoving.DOWN
+			print ".. added lowerStation.."
+			enqItemFreq(self.lowerStations, newFloor)
+		self.__printStations(".. after: ")
 	def openDoor(self):
 		isOpen = sOpen.OPENED
 		print ".. door opened .."
@@ -88,49 +89,52 @@ class Elevator:
 		print ".. start from "+str(self.curFloor) + " th floor .."
 		self.__startMoving(dstFloor)
 		#self.__endMoving()
-	def moveOneStepUp(self):
-		pass
-	def checkAndGoOneUp(self):
-		pass
-	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
-		'''TODO: DEBUG'''
+	def __checkAndGoOneUp(self):
+		ups = self.upperStations
+		self.movingStatus = sMoving.UP
+		sortedList = []
+		for key in sorted(ups.iterkeys()):
+			sortedList.append(key)
+		dst = sortedList[0]
+		if (dst == self.curFloor):
+			removeItem(ups, dst)
+			self.movingStatus = sMoving.STAY
+			self.openDoor()
+		elif len(ups)>0:
+			self.__moveOneUp()
+		else:
+			self.movingStatus = sMoving.STAY
+	def __checkAndGoOneDown(self):
+		lws = self.lowerStations
+		self.movingStatus = sMoving.DOWN
+		sortedList = []
+		for key in sorted(lws.iterkeys()):
+			sortedList.append(key)
+		dst = sortedList[-1]
+		if (dst == self.curFloor):
+			removeItem(lws, dst)
+			self.movingStatus = sMoving.STAY
+			self.openDoor()
+		elif len(lws)>0:
+			self.__moveOneDown()
+		else:
+			self.movingStatus = sMoving.STAY
+	def updateOneClk(self): 
 		ups = self.upperStations
 		lws = self.lowerStations
 
-		if self.movingStatus == sMoving.STAY :
-			if len(ups)>0 and len(lws)==0:
-				self.movingStatus = sMoving.UP
-				sortedList = []
-				for key in sorted(ups.iterkeys()):
-					sortedList.append(key)
-				dst = sortedList[0]
-				if (dst == self.curFloor):
-					removeItem(ups, dst)
-					self.movingStatus = sMoving.STAY
-					self.openDoor()
-				else:
-					self.__moveOneUp()
-			elif len(ups)==0 and len(lws)>0:
-				self.movingStatus = sMoving.DOWN
-				sortedList = []
-				for key in sorted(lws.iterkeys()):
-					sortedList.append(key)
-				dst = sortedList[-1]
-				if (dst == self.curFloor):
-					removeItem(lws, dst)
-					self.movingStatus = sMoving.STAY
-					self.openDoor()
-				else:
-					self.__moveOneDown()
+		if len(ups)==0 and len(lws)==0:
+			self.movingStatus = sMoving.STAY
 		else:
-			if len(ups)==0 and len(lws)==0:
-				self.movingStatus = sMoving.STAY
-			else: 
-				if self.movingStatus == sMoving.UP :
-					pass
-				elif self.movingStatus == sMoving.DOWN :
-					pass
-
+			if self.movingStatus == sMoving.STAY :
+				if len(ups)>0 and len(lws)==0:
+					self.__checkAndGoOneUp()
+				elif len(ups)==0 and len(lws)>0:
+					self.__checkAndGoOneDown()
+			elif self.movingStatus == sMoving.UP :
+				self.__checkAndGoOneUp()
+			elif self.movingStatus == sMoving.DOWN :
+				self.__checkAndGoOneDown()
 
 ############# TEST MAIN() ##################
 

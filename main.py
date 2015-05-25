@@ -18,6 +18,6 @@ while(True):
 	else:
 		print ">> update next status"
 		print e_controller
-		e_controller.update()
+		e_controller.updateOneClk()
 		print e_controller
 		time.sleep(1)

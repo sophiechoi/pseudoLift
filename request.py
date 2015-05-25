@@ -29,6 +29,6 @@ class Request:
 			return "Req("+str(self.isI) +", "+str(self.whichN)+", "+str(self.btn)+", "+str(self.chosenElevator)+")"
 	def __str__(self):
 		if self.isI:
-			return " IN: clicked btn "+str(self.btn) +" in elevator "+str(self.whichN)
+			return " IN: clicked btn_"+str(self.btn) +" in elevator_"+str(self.whichN)
 		else:
-			return " EX: clicked btn "+str(self.btn) +" in floor "+str(self.whichN)
+			return " EX: clicked btn_"+str(self.btn) +" in floor_"+str(self.whichN)

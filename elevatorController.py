@@ -7,7 +7,7 @@ from g import enum
 
 #Status
 E_Btns  = enum(UP=2, DOWN=1)
-I_Btns  = enum(None=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=9)
+I_Btns  = enum(NNONE=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=9)
 sMoving = enum(STAY=0, DOWN=1, UP=2) #duplicated
 sOpen = enum(CLOSED=0, OPENED=1) #duplicated
 
@@ -45,12 +45,12 @@ class E_controller:
 		minDistance = len(self.elevators) + 1
 		es = self.elevators
 		for i in range(len(es)):
-			if abs(es[i].currFloor - whichN) < minDistance:
-				minDistance = abs(es[i].currFloor - whichN)
+			if abs(es[i].curFloor - whichN) < minDistance:
+				minDistance = abs(es[i].curFloor - whichN)
 				closest = es[i]
 		return i
 
-	def pickElevator(self, whichN, upOrDownBtn):
+	def __pickElevator(self, whichN, upOrDownBtn):
 		if upOrDownBtn==E_Btns.UP: 
 			filteredElevators = self.__filterElevator(sMoving.UP) #UP & STAY
 			if not filteredElevators :
@@ -63,8 +63,6 @@ class E_controller:
 				filteredElevators = self.elevators
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
-	def enqRequests(self, requests):
-		pass
 	def enqRequest(self, request):
 		i 	= int(request.whichN)
 		btn = int(request.btn)
@@ -87,35 +85,39 @@ class E_controller:
 					e.insertDst(newStation)
 		else : # handle EXTERNAL UP/DOWN buttons
 			self.waitingRequests.append(request)
-			eIndex = self.pickElevator(i, btn)
+			eIndex = self.__pickElevator(i, btn)
 			e 	   = self.elevators[eIndex]
 			request.chosenElevatorIndex = eIndex # INITIAL MARK 
-			newStation = btn - 2
+			newStation = i
 			e.insertDst(newStation)
-	def update(self):
+
+	def enqRequests(self, requests):
 		pass
+
 	def updateOneClk(self):
-		'''DEBUG'''
 		#If waitingRequest is achieved unintentionally, CANCEL it.
-		pairs = [] #pair = (currFloors, movingStatus)
-		for i in range(len(self.elevators)):
-			pair = Pair(self.elevators[i].currFloor, self.elevators[i].movingStatus)
+		pairs = [] #pair = (curFloors, movingStatus)
+		es = self.elevators
+		for i in range(len(es)):
+			pair = Pair(es[i].curFloor, es[i].movingStatus)
 			pairs.append(pair)
 		for i in range(len(pairs)):
-			achieved = [x for x in self.waitingRequests if x.isI==False and x.whichN==pairs.l and x.btn==pairs.r]
+			achieved = [r for r in self.waitingRequests if r.isI==False and r.whichN==pairs[i].l and x.btn==pairs[i].r]
 			for a in range(len(achieved)):
 				a.chosenElevator.deqItemFreq(paris.l)
 				self.waitingRequests.remove(a)
 		#IF REQUESTs EXIST, handle them
 
-
 		#UPDATE TO NEXT STATUS(FLOOR)		
-		for i in range(len(self.elevators)):
-			self.elevators[i].updateOneClk()
+		for i in range(len(es)):
+			es[i].updateOneClk()
 		print "[[[ELEVETOR STATES]]]"
-		for i in range(len(self.elevators)):
-			print self.elevators[i]
+		for i in range(len(es)):
+			print es[i]
 		time.sleep(1)
+
+
+
 
 
 ############# MAIN() ##################
