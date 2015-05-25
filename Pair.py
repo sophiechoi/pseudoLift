@@ -35,3 +35,17 @@ for i in range(len(psss)):
 
 print ps
 '''
+
+d= {}
+d[1] ='a'
+d[3] ='bb'
+d[2] ='cc'
+d[10] ='xx'
+print d
+sortedList =[]
+
+for key in sorted(d.iterkeys()):
+	sortedList.append(key)
+
+print sortedList
+print sortedList[0]

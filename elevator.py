@@ -116,13 +116,29 @@ class Elevator:
 		print ".. start from "+str(self.curFloor) + " th floor .."
 		self.__startMoving(dstFloor)
 		self.__endMoving()
-	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
-		#if movingStatus == 0 :
-		#	if 
-		# if upperStations + lowerStations == []:
-		#	movingStatus = 0
+	def moveOneStepUp(self):
 		pass
-		#if destinations:
+	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
+		'''TODO'''
+		
+		if self.movingStatus == 0 :
+			if self.upperStations and not self.lowerStations:
+				self.movingStatus = 2 #up
+				sortedList = []
+				for key in sorted(self.upperStations.iterkeys()):
+					sortedList.append(key)
+				dst = sortedList[0]
+				if (dst > self.curFloor):
+					self.__moveOneUp()
+				elif (dst == self.curFloor) # or CONTAINS?
+					removeItem(self.upperStations, dst)
+					self.openDoor()
+			else not self.upperStations and self.lowerStations:
+				self.movingStatus = 1
+		else:
+			if not self.upperStations and not self.lowerStations:
+				self.movingStatus = 0
+			else: 
 
 ############# TEST MAIN() ##################
 

@@ -11,16 +11,14 @@ def remove(L, value):
     pass
 
 class E_controller:
-	'''TODO'''
 	waitingRequests = [] 
 	#clk = None
-	#rst = None
+	rst = None
 	n = None
 	f = None
-	# requests = [] #maybe NOT need
 	elevators = []
 	def __init__(self, n, f, ele=Elevator(f)):
-		print "E_controller.__init__()"
+		print "E_controller.init()"
 		self.n = n # N-way elevator 
 		self.f = f # num of floors 
 		for i in range(n):
@@ -41,7 +39,6 @@ class E_controller:
 				minDistance = abs(elevators[i].currFloor - whichFloor)
 				closest = elevators[i]
 		return i
-	'''TODO'''
 	def pickElevator(self, whichFloor, upOrDownBtn):
 		if upOrDownBtn == 1: #if UP btn 
 			# filter movingUp or Staying elevators
@@ -70,7 +67,7 @@ class E_controller:
 		pass
 	def enqRequest(self, request):
 		if request.isInternal : 
-			i 	= request.whichElevator
+			i 	= request.which
 			btn = request.btn
 			e   = elevators[i]
 			if (btn == 1 or btn == 2): #handle OPEN/CLOSE button
@@ -86,9 +83,6 @@ class E_controller:
 				if (newStation == currFloor):
 					#ignore if same floor with currFloor
 					pass
-				elif newStation in e.upperStations.extend(e.lowerStations):
-					#ignore if already in stationslist
-					pass
 				else:
 					e.insertDst(btn)
 		else : # handle UP/DOWN buttons
@@ -100,7 +94,7 @@ class E_controller:
 	def updateOneClk(self):
 		'''DEBUG'''
 		#If waitingRequest is achieved unintentionally, CANCEL it.
-		triples = [] #pair = (currFloors, movingStatus)
+		pairs = [] #pair = (currFloors, movingStatus)
 		for i in range(len(self.elevators)):
 			pair = Pair(self.elevators[i].currFloor, self.elevators[i].movingStatus)
 			pairs.append(pair)
@@ -109,6 +103,9 @@ class E_controller:
 			for a in range(len(achieved)):
 				a.chosenElevator.deqItemFreq(paris.left)
 				waitingRequests.remove(a)
+		#IF REQUESTs EXIST, handle them
+
+
 		#UPDATE TO NEXT STATUS(FLOOR)		
 		for i in range(len(self.elevators)):
 			self.elevators[i].updateOneClk()
