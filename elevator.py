@@ -90,6 +90,8 @@ class Elevator:
 		#self.__endMoving()
 	def moveOneStepUp(self):
 		pass
+	def checkAndGoOneUp(self):
+		pass
 	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
 		'''TODO: DEBUG'''
 		ups = self.upperStations
@@ -99,21 +101,36 @@ class Elevator:
 			if len(ups)>0 and len(lws)==0:
 				self.movingStatus = sMoving.UP
 				sortedList = []
-				for key in sorted(self.upperStations.iterkeys()):
+				for key in sorted(ups.iterkeys()):
 					sortedList.append(key)
 				dst = sortedList[0]
-				if (dst > self.curFloor):
-					self.__moveOneUp()
-				elif (dst == self.curFloor): # or CONTAINS?
+				if (dst == self.curFloor):
 					removeItem(ups, dst)
+					self.movingStatus = sMoving.STAY
 					self.openDoor()
+				else:
+					self.__moveOneUp()
 			elif len(ups)==0 and len(lws)>0:
 				self.movingStatus = sMoving.DOWN
+				sortedList = []
+				for key in sorted(lws.iterkeys()):
+					sortedList.append(key)
+				dst = sortedList[-1]
+				if (dst == self.curFloor):
+					removeItem(lws, dst)
+					self.movingStatus = sMoving.STAY
+					self.openDoor()
+				else:
+					self.__moveOneDown()
 		else:
 			if len(ups)==0 and len(lws)==0:
 				self.movingStatus = sMoving.STAY
 			else: 
-				pass
+				if self.movingStatus == sMoving.UP :
+					pass
+				elif self.movingStatus == sMoving.DOWN :
+					pass
+
 
 ############# TEST MAIN() ##################
 
