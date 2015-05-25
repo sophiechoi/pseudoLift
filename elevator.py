@@ -15,13 +15,13 @@ class Elevator:
 	upperStations = {}
 	lowerStations = {}
 	def __init__(self, maxFloor=7, isOpen=0, movingStatus=0, upperStations=[], curFloor = 1):
+		print "Elevator.init()"
 		self.curFloor = curFloor
 		self.maxFloor = maxFloor
 		self.movingStatus = movingStatus
 		self.isOpen = isOpen
 		for i in range(len(upperStations)):
 			enqItemFreq(self.upperStations, upperStations[i])
-		print "Elevator.init() "+str(isOpen)+", "+ str(movingStatus)
 	def __repr__(self):
 		return "ELEVATOR STATE("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
 	def __str__(self):
@@ -34,15 +34,14 @@ class Elevator:
 		elif self.movingStatus==sMoving.DOWN:
 			print msg+str(self.lowerStations)+"/"+str(self.upperStations)
 	def __moveOneUp(self):
-		print "moveOneUp()"
-		print self.maxFloor
+		print "before .. from "+str(self.curFloor)
 		if (self.curFloor < self.maxFloor):
 			self.curFloor += 1
-			print ".. moving up .."
+			print ".. moving up .. to "+str(self.curFloor)
 	def __moveOneDown(self):
 		if (self.curFloor > 1):
 			self.curFloor -= 1
-			print ".. moving down .."
+			print ".. moving down ..to "+str(self.curFloor)
 	def __checkAndGoOneUp(self):
 		ups = self.upperStations
 		self.movingStatus = sMoving.UP
@@ -50,16 +49,13 @@ class Elevator:
 		for key in sorted(ups.iterkeys()):
 			sortedList.append(key)
 		dst = sortedList[0]
-		print "dst: "+str(dst)
 		if (dst == self.curFloor):
 			deleteItem(ups, dst)
 			self.movingStatus = sMoving.STAY
 			self.openDoor()
 		elif len(ups)>0:
-			print "case a"
 			self.__moveOneUp()
 		else:
-			print "case b"
 			self.movingStatus = sMoving.STAY
 	def __checkAndGoOneDown(self):
 		lws = self.lowerStations
@@ -77,33 +73,24 @@ class Elevator:
 		else:
 			self.movingStatus = sMoving.STAY
 	def updateOneClk(self): 
-		print "update()"
 		ups = self.upperStations
 		lws = self.lowerStations
-		print len(ups)
-		print len(lws)
 
 		if len(ups)==0 and len(lws)==0:
-			print "case1"
 			self.movingStatus = sMoving.STAY
 		else:
 			if self.movingStatus == sMoving.STAY :
 				if len(ups)>0 and len(lws)==0:
-					print "case2"
 					self.__checkAndGoOneUp()
 				elif len(ups)==0 and len(lws)>0:
-					print "case3"
 					self.__checkAndGoOneDown()
 			elif self.movingStatus == sMoving.UP :
-				print "case4"
 				self.__checkAndGoOneUp()
 			elif self.movingStatus == sMoving.DOWN :
-				print "case5"
 				self.__checkAndGoOneDown()
 
 	def insertDst(self, newFloor):
-		print "newFloor: "
-		print newFloor
+		print "insertDst()"
 		self.__printStations(".. before: ")
 		if newFloor > self.curFloor:
 			if self.movingStatus==sMoving.STAY: #need?

@@ -18,14 +18,15 @@ def parseAndGenRequest(userInput):
 	userInputs = userInput.split(" ")
 	isInternal = (True if userInputs[0]=="I" else False)
 	request = Request(isInternal, userInputs[1], userInputs[2])
-	print "parseAndGenRequest()"
-	for i in range(len(userInputs)):
-		print userInputs[i]
+	#print "parseAndGenRequest()"
+	#for i in range(len(userInputs)):
+	#	print userInputs[i]
 	return request
 
 #print parseAndGenRequest("I 3 4")
 
 def enqItemFreq(D, item):
+	print "enqItemFreq()"
 	#print D
 	if not item in D:
 		D[item] = 1
@@ -53,9 +54,11 @@ def deleteItem(D, item):
 	#print D
 	#print "\n"
 
-#d = {}
-#enqItemFreq(d, 'aaa')
-#enqItemFreq(d, 'aaa')
-#enqItemFreq(d, 'bbb')
-#deleteItem(d, 'aaa')
-
+d = {}
+enqItemFreq(d, 'aaa')
+enqItemFreq(d, 'aaa')
+enqItemFreq(d, 'bbb')
+deleteItem(d, 'aaa')
+a ={}
+enqItemFreq(a, "lll")
+print a

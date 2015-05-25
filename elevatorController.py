@@ -18,25 +18,29 @@ class E_controller:
 	waitingRequests = [] 
 	elevators = []
 
-	def __init__(self, numElevators=1, numFloors=7, ele=Elevator(7)):
+	def __init__(self, numElevators=1, numFloors=7):
 		print "E_controller.init()"
 		self.n = numElevators
 		self.f = numFloors 
-		for i in range(numElevators):
-			self.elevators.append(ele)
-		print ("num of floors: "+str(self.f))
-		print ("num of elevators: " + str(len(self.elevators)))
+		for i in range(self.n):
+			e = Elevator(self.f)
+			self.elevators.append(e)
+		print ("num of floors: "+str(self.f)+", num of elevators: " + str(len(self.elevators)))
 
 	def __repr__(self):
+		#print "repr()"
+
 		result = ""
 		for i in range(len(self.elevators)):
+			#print "i: "+str(i)
 			result += str(self.elevators[i])
 		return result
 
 	def __filterElevator(self, movingStatus):
 		newElevators = []
 		for i in range(len(self.elevators)):
-			if self.elevators[i].movingStatus == movingStatus or self.elevators[i].movingStatus == 0:
+			mStatus = self.elevators[i].movingStatus
+			if mStatus == movingStatus or mStatus == 0:
 				newElevators.append(self.elevators[i])
 		return newElevators
 
@@ -46,7 +50,7 @@ class E_controller:
 		es = self.elevators
 		for i in range(len(es)):
 			if abs(es[i].curFloor - whichN) < minDistance:
-				minDistance = abs(es[i].curFloor - whichN)
+				minDistance = abs(es[i].curFloor - whichN) #abs?
 				closest = es[i]
 		return i
 
@@ -64,11 +68,14 @@ class E_controller:
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 	def enqRequest(self, request):
+		#print "enqRequest()"
 		i 	= int(request.whichN)
 		btn = int(request.btn)
+		print str(i)+", "+str(btn)
 		if request.isI : 
+			#print "isI"
 			e   = self.elevators[i]
-			if (btn == I_Btns.OPEN or btn == I_Btns.CLOSE):
+			if (btn==I_Btns.OPEN or btn==I_Btns.CLOSE):
 				if 	e.movingStatus==sMoving.STAY:
 					if   (e.isOpen==sOpen.OPENED and btn==I_Btns.CLOSE):
 						e.closeDoor()
@@ -82,6 +89,7 @@ class E_controller:
 					#ignore if same floor with curFloor
 					pass
 				else:
+					print "insert call(1)"
 					e.insertDst(newStation)
 		else : # handle EXTERNAL UP/DOWN buttons
 			self.waitingRequests.append(request)
@@ -89,6 +97,7 @@ class E_controller:
 			e 	   = self.elevators[eIndex]
 			request.chosenElevatorIndex = eIndex # INITIAL MARK 
 			newStation = i
+			print "insert call(2)"
 			e.insertDst(newStation)
 
 	def enqRequests(self, requests):
@@ -110,6 +119,7 @@ class E_controller:
 
 		#UPDATE TO NEXT STATUS(FLOOR)	
 		for i in range(len(es)):
+			print "iiii: "+ str(i)
 			es[i].updateOneClk()
 		time.sleep(1)
 
