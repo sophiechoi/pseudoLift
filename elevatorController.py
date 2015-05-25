@@ -1,5 +1,6 @@
 from elevator import Elevator
 from request import Request 
+from pair import Pair
 import time 
 
 # love this article: http://stackoverflow.com/questions/4915920/how-to-delete-an-item-in-a-list-if-it-exists-python
@@ -65,6 +66,8 @@ class E_controller:
 			#if both movingStatus=2, closest(=?first) one UP, second one to DOWN
 			#movingS
 		pass
+	def enqRequests(self, requests):
+		pass
 	def enqRequest(self, request):
 		if request.isInternal : 
 			i 	= request.whichElevator
@@ -88,20 +91,30 @@ class E_controller:
 					pass
 				else:
 					e.insertDst(btn)
-		else :
-			'''TODO'''
-			'''handle UP/DOWN buttons '''
-			''' put in LEFT OVERS '''
-			''' If DONE, remove from LEFT_OVER list'''
+		else : # handle UP/DOWN buttons
 			waitingRequests.append(request)
 			ii = request.whichFloor
 			ee = self.pickElevator(ii, btn)
 			request.chosenElevator(ee)
 			ee.insertDst(btn)
 	def updateOneClk(self):
+		'''DEBUG'''
+		#If waitingRequest is achieved unintentionally, CANCEL it.
+		triples = [] #pair = (currFloors, movingStatus)
+		for i in range(len(self.elevators)):
+			pair = Pair(self.elevators[i].currFloor, self.elevators[i].movingStatus)
+			pairs.append(pair)
+		for i in range(len(pairs)):
+			achieved = [x for x in waitingRequests if x.isInternal==False and x.which==pairs.left and x.btn==pairs.right]
+			for a in range(len(achieved)):
+				a.chosenElevator.deqItemFreq(paris.left)
+				waitingRequests.remove(a)
+		#UPDATE TO NEXT STATUS(FLOOR)		
 		for i in range(len(self.elevators)):
 			self.elevators[i].updateOneClk()
-		print "status: "
+		print "[[[ELEVETOR STATES]]]"
+		for i in range(len(self.elevators)):
+			print self.elevators[i]
 		time.sleep(1)
 
 

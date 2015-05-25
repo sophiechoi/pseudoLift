@@ -4,24 +4,58 @@ def remove(L, value):
   except ValueError:
     pass
 
+def enqItemFreq(D, item):
+	print D
+	if not item in D:
+		D[item] = 1
+	else:
+		before = D[item]
+		D[item] += 1
+	print D
+	print "\n"
+def deqItemFreq(D, item):
+	print D
+	if not item in D:
+		pass
+	else :
+		before = D[item]
+		if before == 1:
+			del D[item]
+		else:
+			D[item] -= 1
+	print D
+	print "\n"
+def deleteItem(D, item):
+	print D
+	if item in D:
+		del D[item]
+	print D
+	print "\n"
+
+#d = {}
+#enqItemFreq(d, 'aaa')
+#enqItemFreq(d, 'aaa')
+#enqItemFreq(d, 'bbb')
+#deleteItem(d, 'aaa')
+
 class Elevator:
 	isOpen = None	# 0: closed, 1: opened
 	movingStatus = None # 0: stay, 1: down, 2: up 
-	curFloor = None 
+	curFloor = None  # 1,2, ~ 7
 	maxFloor = None
-	upperStations = None
-	lowerStations = None
+	upperStations = {}
+	lowerStations = {}
 	def __init__(self, maxFloor, isOpen=0, movingStatus=0, upperStations=[], curFloor = 1):
 		self.curFloor = curFloor
 		self.maxFloor = maxFloor
 		self.movingStatus = movingStatus
 		self.isOpen = isOpen
-		self.upperStations = upperStations
-		self.lowerStations = []
+		for i in range(len(upperStations)):
+			enqItemFreq(self.upperStations, upperStations[i])
 		print "Elevator.init() "+str(isOpen)+", "+ str(movingStatus)
 		#self.printStations("init: ")
 	def __repr__(self):
-		pass
+		print "ELEVATOR STATE("+"curFloor: "+str(curFloor)+", isOpen: "+str(isOpen)+", movingStatus: "+str(movingStatus)+")"
 	def __printPos(self):
 		print ">> "+str(self.curFloor) + " th floor"
 	def __moveOneUp(self):
@@ -44,46 +78,24 @@ class Elevator:
 			self.__printPos()
 	def __startMoving(self, dstFloor):
 		if (dstFloor > self.curFloor):
-			self.movingStatus = 2
+			self.movingStatus = 2 #up
 			self.__moveUp(dstFloor - self.curFloor)
 		elif (dstFloor < self.curFloor):
-			self.movingStatus = 1
+			self.movingStatus = 1 #down
 			self.__moveDown(self.curFloor - dstFloor)
 	def __endMoving(self):
-		self.movingStatus = 0
+		self.movingStatus = 0 #stay
 		self.openDoor()
 		self.closeDoor()
-	def __insertInUpperStations(self, newFloor):
-		stations = self.upperStations
-		if not stations :
-			stations.append(newFloor) 
-		elif newFloor in stations:
-			pass
-		else:
-			for i in range(len(stations)):
-				if newFloor < stations[i] :
-					stations.insert(i, newFloor)
-					break
-				elif i == (len(stations)-1):
-					stations.append(newFloor)
-	def __insertInLowerStations(self, newFloor):
-		stations = self.lowerStations
-		if not stations :
-			stations.append(newFloor) 
-		elif newFloor in stations:
-			pass
-		else:
-			for i in range(len(stations)):
-				if newFloor > stations[i] :
-					stations.insert(i, newFloor)
-					break
-				elif i == (len(stations)-1):
-					stations.append(newFloor)
 	def __printStations(self, isBefore):
 		if self.movingStatus==2:
 			print isBefore+str(self.upperStations)+"/"+str(self.lowerStations)
 		elif self.movingStatus==1:
 			print isBefore+str(self.lowerStations)+"/"+str(self.upperStations)
+	def __insertInUpperStations(self, newFloor):
+		enqItemFreq(self.upperStations, newFloor)
+	def __insertInLowerStations(self, newFloor):
+		enqItemFreq(self.lowerStations, newFloor)
 	def insertDst(self, newFloor):
 		self.__printStations("before: ")
 		print str(self.movingStatus)
@@ -94,10 +106,6 @@ class Elevator:
 			print "lower"
 			self.__insertInLowerStations(newFloor)
 		self.__printStations("after: ")
-	def cancelDst(self, oldFloor):
-		'''TODO: cancel external dst '''
-		remove(self.upperStations, oldFloor)
-		remove(self.lowerStations, oldFloor)
 	def openDoor(self):
 		isOpen = 1
 		print ".. door opened .."
@@ -124,8 +132,3 @@ class Elevator:
 #e = Elevator(7, 0, 2, [3,4,6], 2)
 #e.insertDst(3)
 #e.insertDst(1)
-E= 1
-print E
-e= 2
-print e
-print E
