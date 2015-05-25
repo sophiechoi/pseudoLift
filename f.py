@@ -1,16 +1,29 @@
+from request import Request 
+
+
 def rem(lst, value):
 	try:
   		lst.remove(value)
   	except ValueError:
   		pass
 
-'''
-list1 = [1,2,3]
-list1.remove(2)
-print list1
-rem(list1, 2)
-print list1
-'''
+#TEST
+#list1 = [1,2,3]
+#list1.remove(2)
+#print list1
+#rem(list1, 2)
+#print list1 
+
+def parseAndGenRequest(userInput):
+	userInputs = userInput.split(" ")
+	isInternal = (True if userInputs[0]=="I" else False)
+	request = Request(isInternal, userInputs[1], userInputs[2])
+	print "parseAndGenRequest()"
+	for i in range(len(userInputs)):
+		print userInputs[i]
+	return request
+
+#print parseAndGenRequest("I 3 4")
 
 def enqItemFreq(D, item):
 	#print D

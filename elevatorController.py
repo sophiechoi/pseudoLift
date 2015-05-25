@@ -3,94 +3,97 @@ from request import Request
 from pair import Pair
 import time 
 from f import rem, enqItemFreq, deqItemFreq, deleteItem
+from g import enum
+
+#Status
+E_Btns  = enum(UP=2, DOWN=1)
+I_Btns  = enum(None=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=9)
+sMoving = enum(STAY=0, DOWN=1, UP=2) #duplicated
+sOpen = enum(CLOSED=0, OPENED=1) #duplicated
 
 class E_controller:
-	#clk = None
-	rst = None
-	waitingRequests = [] 
 	n = None
 	f = None
+	rst = None
+	waitingRequests = [] 
 	elevators = []
-	def __init__(self, n, f, ele=Elevator(f)):
+
+	def __init__(self, numElevators, numFloors=7, ele=Elevator(f)):
 		print "E_controller.init()"
-		self.n = n # N-way elevator 
-		self.f = f # num of floors 
-		for i in range(n):
+		self.n = numElevators
+		self.f = numFloors 
+		for i in range(numElevators):
 			self.elevators.append(ele)
 		print ("num of floors: "+str(self.f))
 		print ("num of elevators: " + str(len(self.elevators)))
+
 	def __repr__(self):
-		'''TODO'''
 		result = ""
 		for i in range(len(self.elevators)):
 			result += str(self.elevators[i])
 		return result
+
 	def __filterElevator(self, movingStatus):
 		newElevators = []
 		for i in range(len(self.elevators)):
 			if self.elevators[i].movingStatus == movingStatus or self.elevators[i].movingStatus == 0:
 				newElevators.append(self.elevators[i])
 		return newElevators
-	def __pickClosestElevator(self, elevators, whichFloor):
+
+	def __pickClosestElevator(self, elevators, whichN):
 		closest = None
-		minDistance = 10
-		for i in range(len(elevators)):
-			if abs(elevators[i].currFloor - whichFloor) < minDistance:
-				minDistance = abs(elevators[i].currFloor - whichFloor)
-				closest = elevators[i]
+		minDistance = len(self.elevators) + 1
+		es = self.elevators
+		for i in range(len(es)):
+			if abs(es[i].currFloor - whichN) < minDistance:
+				minDistance = abs(es[i].currFloor - whichN)
+				closest = es[i]
 		return i
-	def pickElevator(self, whichFloor, upOrDownBtn):
-		if upOrDownBtn == 1: #if UP btn 
-			# filter movingUp or Staying elevators
-			filteredElevators = self.__filterElevator(2)
-			# if not, use movingDown elevators
+
+	def pickElevator(self, whichN, upOrDownBtn):
+		if upOrDownBtn==E_Btns.UP: 
+			filteredElevators = self.__filterElevator(sMoving.UP) #UP & STAY
 			if not filteredElevators :
 				filteredElevators = self.elevators
-			self.__pickClosestElevator(filteredElevators, whichFloor)
-		elif upOrDownBtn ==2: #if DOWN btn
-			# filter movingDown or Staying elevators
-			filteredElevators = self.__filterElevator(1)
-			# if not, use movingUp elevators
+			return self.__pickClosestElevator(filteredElevators, whichN)
+
+		elif upOrDownBtn==E_Btns.DOWN:
+			filteredElevators = self.__filterElevator(sMoving.DOWN) #DOWN & STAY
 			if not filteredElevators :
 				filteredElevators = self.elevators
-			self.__pickClosestElevator(filteredElevators, whichFloor)
-		### WHAT ABOUT UNHANDLED_BTNS? leftovers..
-		#elif down button
-			#filter movingStatus == 1, closest
-			#else, closest
-		#elif up & down button
-			#both 0,or each one movingStatus=2,1, then each one
-			#if both movingStatus=2, closest(=?first) one UP, second one to DOWN
-			#movingS
-		pass
+			return self.__pickClosestElevator(filteredElevators, whichN)
+
 	def enqRequests(self, requests):
 		pass
 	def enqRequest(self, request):
-		if request.isInternal : 
-			i 	= request.which
-			btn = request.btn
-			e   = elevators[i]
-			if (btn == 1 or btn == 2): #handle OPEN/CLOSE button
-				if 	e.movingStatus==0:
-					if   (e.isOpen==1 and btn==2):
+		i 	= int(request.whichN)
+		btn = int(request.btn)
+		if request.isI : 
+			e   = self.elevators[i]
+			if (btn == I_Btns.OPEN or btn == I_Btns.CLOSE):
+				if 	e.movingStatus==sMoving.STAY:
+					if   (e.isOpen==sOpen.OPENED and btn==I_Btns.CLOSE):
 						e.closeDoor()
-					elif (e.isOpen==0 and btn==1):
+					elif (e.isOpen==sOpen.CLOSED and btn==I_Btns.OPEN):
 						e.openDoor()
 				else:
 					pass
 			else: #handle NUM_OF_FLOOR(1~7) button			 
 				newStation = btn - 2
-				if (newStation == currFloor):
-					#ignore if same floor with currFloor
+				if (newStation == e.curFloor):
+					#ignore if same floor with curFloor
 					pass
 				else:
-					e.insertDst(btn)
-		else : # handle UP/DOWN buttons
-			waitingRequests.append(request)
-			ii = request.whichFloor
-			ee = self.pickElevator(ii, btn)
-			request.chosenElevator(ee)
-			ee.insertDst(btn)
+					e.insertDst(newStation)
+		else : # handle EXTERNAL UP/DOWN buttons
+			self.waitingRequests.append(request)
+			eIndex = self.pickElevator(i, btn)
+			e 	   = self.elevators[eIndex]
+			request.chosenElevatorIndex = eIndex # INITIAL MARK 
+			newStation = btn - 2
+			e.insertDst(newStation)
+	def update(self):
+		pass
 	def updateOneClk(self):
 		'''DEBUG'''
 		#If waitingRequest is achieved unintentionally, CANCEL it.
@@ -99,10 +102,10 @@ class E_controller:
 			pair = Pair(self.elevators[i].currFloor, self.elevators[i].movingStatus)
 			pairs.append(pair)
 		for i in range(len(pairs)):
-			achieved = [x for x in waitingRequests if x.isInternal==False and x.which==pairs.left and x.btn==pairs.right]
+			achieved = [x for x in self.waitingRequests if x.isI==False and x.whichN==pairs.l and x.btn==pairs.r]
 			for a in range(len(achieved)):
-				a.chosenElevator.deqItemFreq(paris.left)
-				waitingRequests.remove(a)
+				a.chosenElevator.deqItemFreq(paris.l)
+				self.waitingRequests.remove(a)
 		#IF REQUESTs EXIST, handle them
 
 
