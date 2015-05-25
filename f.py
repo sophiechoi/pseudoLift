@@ -26,7 +26,7 @@ def parseAndGenRequest(userInput):
 #print parseAndGenRequest("I 3 4")
 
 def enqItemFreq(D, item):
-	print "enqItemFreq()"
+	#print "enqItemFreq()"
 	#print D
 	if not item in D:
 		D[item] = 1
@@ -54,6 +54,8 @@ def deleteItem(D, item):
 	#print D
 	#print "\n"
 
+#TEST
+'''
 d = {}
 enqItemFreq(d, 'aaa')
 enqItemFreq(d, 'aaa')
@@ -62,3 +64,4 @@ deleteItem(d, 'aaa')
 a ={}
 enqItemFreq(a, "lll")
 print a
+'''

@@ -68,10 +68,10 @@ class E_controller:
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 	def enqRequest(self, request):
-		#print "enqRequest()"
+		#print "Request()"
 		i 	= int(request.whichN)
 		btn = int(request.btn)
-		print str(i)+", "+str(btn)
+		#print str(i)+", "+str(btn)
 		if request.isI : 
 			#print "isI"
 			e   = self.elevators[i]
@@ -89,7 +89,7 @@ class E_controller:
 					#ignore if same floor with curFloor
 					pass
 				else:
-					print "insert call(1)"
+					#print "insert call(1)"
 					e.insertDst(newStation)
 		else : # handle EXTERNAL UP/DOWN buttons
 			self.waitingRequests.append(request)
@@ -97,7 +97,7 @@ class E_controller:
 			e 	   = self.elevators[eIndex]
 			request.chosenElevatorIndex = eIndex # INITIAL MARK 
 			newStation = i
-			print "insert call(2)"
+			#print "insert call(2)"
 			e.insertDst(newStation)
 
 	def enqRequests(self, requests):
@@ -119,7 +119,7 @@ class E_controller:
 
 		#UPDATE TO NEXT STATUS(FLOOR)	
 		for i in range(len(es)):
-			print "iiii: "+ str(i)
+			#print "iiii: "+ str(i)
 			es[i].updateOneClk()
 		time.sleep(1)
 

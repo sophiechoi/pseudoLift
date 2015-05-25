@@ -12,14 +12,16 @@ class Elevator:
 	movingStatus = None 
 	curFloor = None
 	maxFloor = None
-	upperStations = {}
-	lowerStations = {}
+	upperStations = None
+	lowerStations = None
 	def __init__(self, maxFloor=7, isOpen=0, movingStatus=0, upperStations=[], curFloor = 1):
 		print "Elevator.init()"
 		self.curFloor = curFloor
 		self.maxFloor = maxFloor
 		self.movingStatus = movingStatus
 		self.isOpen = isOpen
+		self.upperStations = {}
+		self.lowerStations = {}
 		for i in range(len(upperStations)):
 			enqItemFreq(self.upperStations, upperStations[i])
 	def __repr__(self):
@@ -34,7 +36,6 @@ class Elevator:
 		elif self.movingStatus==sMoving.DOWN:
 			print msg+str(self.lowerStations)+"/"+str(self.upperStations)
 	def __moveOneUp(self):
-		print "before .. from "+str(self.curFloor)
 		if (self.curFloor < self.maxFloor):
 			self.curFloor += 1
 			print ".. moving up .. to "+str(self.curFloor)
@@ -90,7 +91,7 @@ class Elevator:
 				self.__checkAndGoOneDown()
 
 	def insertDst(self, newFloor):
-		print "insertDst()"
+		#print "insertDst()"
 		self.__printStations(".. before: ")
 		if newFloor > self.curFloor:
 			if self.movingStatus==sMoving.STAY: #need?
