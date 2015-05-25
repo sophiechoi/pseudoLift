@@ -40,13 +40,14 @@ class E_controller:
 					e.openDoor()
 			remove(btns, 1)
 			remove(btns, 2)
+			'''ignore if same floor with currFloor & ignore already in stationslist'''
 			
 			'''handle 1~7 FLOOR buttons''' # elevator is picked already!
 			if e.movingStatus == 2:
-				higherFloors = [] '''TODO'''#filter higher than currFloor
-				lowerFloors = [] '''TODO'''#filter lower than currFloor
+				higherFloors = []  #filter higher than currFloor
+				lowerFloors = [] #filter lower than currFloor
 				for j in range(len(higherFloors)): 
-					e.insertDst(higherFloors[j]) '''TODO: debug insertDst '''
+					e.insertDst(higherFloors[j]) #TODO: debug insertDst
 				e.extendDst(lowerFloors)
 					
 		else :
@@ -62,25 +63,11 @@ class E_controller:
 
 ############# MAIN() ##################
 #e_controller = E_controller(2, 7)
-e_controller = E_controller(1, 7, Elevator(7, 0, 2, [3,4,5]))
+e_controller = E_controller(1, 7, Elevator(7, 0, 2, [2,4,6]))
 request1_in = Request(True, 0, [9,8,1])
 request2_ex = Request(False, 3, [1, 2])
-print [1, 2, 3]
-a = [1, 2, 3]
-print a
-a.remove(3)
-remove(a,4)
-print a
-x = [4, 10,2,3 , 'a']
-x.sort()
-print x
 #e_controller.enqRequest(request1_in)
 #e_controller.enqRequest(request2_ex)
 #e_controller.updateOneClk()
 
-h = [1,2,3,4]
-x = h
-x.remove(3)
-print h
-print x
 
