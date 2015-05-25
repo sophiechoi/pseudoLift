@@ -9,7 +9,7 @@ from g import enum
 E_Btns  = enum(UP=2, DOWN=1)
 I_Btns  = enum(NNONE=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=9)
 sMoving = enum(STAY=0, DOWN=1, UP=2) #duplicated
-sOpen = enum(CLOSED=0, OPENED=1) #duplicated
+sOpen   = enum(CLOSED=0, OPENED=1) #duplicated
 
 class E_controller:
 	n = None
@@ -18,7 +18,7 @@ class E_controller:
 	waitingRequests = [] 
 	elevators = []
 
-	def __init__(self, numElevators, numFloors=7, ele=Elevator(f)):
+	def __init__(self, numElevators=1, numFloors=7, ele=Elevator(7)):
 		print "E_controller.init()"
 		self.n = numElevators
 		self.f = numFloors 
@@ -108,12 +108,9 @@ class E_controller:
 				self.waitingRequests.remove(a)
 		#IF REQUESTs EXIST, handle them
 
-		#UPDATE TO NEXT STATUS(FLOOR)		
+		#UPDATE TO NEXT STATUS(FLOOR)	
 		for i in range(len(es)):
 			es[i].updateOneClk()
-		print "[[[ELEVETOR STATES]]]"
-		for i in range(len(es)):
-			print es[i]
 		time.sleep(1)
 
 

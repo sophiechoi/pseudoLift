@@ -9,8 +9,9 @@ while(True):
 	userInput = raw_input('Enter your input:')
 	if len(userInput) > 1:
 		print ">> handle input"
-		# userInput ex) I 0 3
-		# userInput ex) E 4 2
+		# userInput ex) I 0 2 (open )
+		# userInput ex) I 0 5 (go 3th floor)
+		# userInput ex) E 6 1 (6th floor, down btn)
 		r = parseAndGenRequest(userInput)
 		print "> "+str(r)
 		e_controller.enqRequest(r)
