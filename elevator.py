@@ -88,8 +88,6 @@ class Elevator:
 			print "lower"
 			self.__insertInLowerStations(newFloor)
 		self.__printStations("after: ")
-	def extendDst(self, floors):
-		destinations.extend(floors)
 	def openDoor(self):
 		isOpen = 1
 		print ".. door opened .."
@@ -101,6 +99,10 @@ class Elevator:
 		self.__startMoving(dstFloor)
 		self.__endMoving()
 	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
+		#if movingStatus == 0 :
+		#	if 
+		# if upperStations + lowerStations == []:
+		#	movingStatus = 0
 		pass
 		#if destinations:
 

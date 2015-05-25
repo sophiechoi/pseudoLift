@@ -1,6 +1,6 @@
 class Request:
 	isInternal = None #True: Internal, FalseExternal
-	clickedButtons = []   
+	clickedButtons = [] ###btons >> ONE btn  
 
 	''' if internal ''' 
 	whichElevator = None #0 , 1 , .. (N-1)

@@ -25,6 +25,16 @@ class E_controller:
 		print ("num of floors: "+str(self.f))
 		print ("num of elevators: " + str(len(self.elevators)))
 	def pickElevator(self):
+		#if up button
+			#movingStatus == 2인 중에, 나랑 제일 가까운 것.
+			#없으면, 그외중 가까운것
+		#elif down button
+			#movingStatus == 1인 중에, 나랑 제일 가까운 것.
+			#없으면, 그외중 가까운것
+		#elif up & down button
+			#둘다 0이거나, movingStatus=2,1이 각각 하나씩 있으면, 각각 하나씩 
+			#movingStatus=2만 있으면, 먼저 올라오는애를 up에, 나중을 down에
+			#movingS
 		pass
 	def enqRequest(self, request):
 		if request.isInternal : 
@@ -43,16 +53,16 @@ class E_controller:
 			'''ignore if same floor with currFloor & ignore already in stationslist'''
 			
 			'''handle 1~7 FLOOR buttons''' # elevator is picked already!
-			if e.movingStatus == 2:
-				higherFloors = []  #filter higher than currFloor
-				lowerFloors = [] #filter lower than currFloor
-				for j in range(len(higherFloors)): 
-					e.insertDst(higherFloors[j]) #TODO: debug insertDst
-				e.extendDst(lowerFloors)
-					
+			if e.movingStatus == 2 or movingStatus == 1:
+				for j in range(len(btns)): 
+					e.insertDst(btns[j])
+			elif e.movingStatus == 0:
+				pass					
 		else :
 			'''handle UP/DOWN buttons '''
-			# e = self.pickElevator()
+			# ee = self.pickElevator()
+			#	for j in range(len(btns)): 
+			#		e.insertDst(btns[j])
 			pass
 	def updateOneClk(self):
 		'''TODO'''
