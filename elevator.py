@@ -1,42 +1,4 @@
-def remove(L, value):
-  try:
-    L.remove(value)
-  except ValueError:
-    pass
-
-def enqItemFreq(D, item):
-	print D
-	if not item in D:
-		D[item] = 1
-	else:
-		before = D[item]
-		D[item] += 1
-	print D
-	print "\n"
-def deqItemFreq(D, item):
-	print D
-	if not item in D:
-		pass
-	else :
-		before = D[item]
-		if before == 1:
-			del D[item]
-		else:
-			D[item] -= 1
-	print D
-	print "\n"
-def deleteItem(D, item):
-	print D
-	if item in D:
-		del D[item]
-	print D
-	print "\n"
-
-#d = {}
-#enqItemFreq(d, 'aaa')
-#enqItemFreq(d, 'aaa')
-#enqItemFreq(d, 'bbb')
-#deleteItem(d, 'aaa')
+from f import rem, enqItemFreq, deqItemFreq, deleteItem
 
 class Elevator:
 	isOpen = None	# 0: closed, 1: opened
@@ -55,7 +17,9 @@ class Elevator:
 		print "Elevator.init() "+str(isOpen)+", "+ str(movingStatus)
 		#self.printStations("init: ")
 	def __repr__(self):
-		print "ELEVATOR STATE("+"curFloor: "+str(curFloor)+", isOpen: "+str(isOpen)+", movingStatus: "+str(movingStatus)+")"
+		return "ELEVATOR STATE("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
+	def __str__(self):
+		return "ELEVATOR STATE("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
 	def __printPos(self):
 		print ">> "+str(self.curFloor) + " th floor"
 	def __moveOneUp(self):
@@ -120,9 +84,9 @@ class Elevator:
 		pass
 	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
 		'''TODO'''
-		
+
 		if self.movingStatus == 0 :
-			if self.upperStations and not self.lowerStations:
+			if len(self.upperStations)>0 and len(self.lowerStations)==0:
 				self.movingStatus = 2 #up
 				sortedList = []
 				for key in sorted(self.upperStations.iterkeys()):
@@ -130,15 +94,16 @@ class Elevator:
 				dst = sortedList[0]
 				if (dst > self.curFloor):
 					self.__moveOneUp()
-				elif (dst == self.curFloor) # or CONTAINS?
+				elif (dst == self.curFloor): # or CONTAINS?
 					removeItem(self.upperStations, dst)
 					self.openDoor()
-			else not self.upperStations and self.lowerStations:
+			elif len(self.upperStations)==0 and len(self.lowerStations)>0:
 				self.movingStatus = 1
 		else:
-			if not self.upperStations and not self.lowerStations:
+			if len(self.upperStations)==0 and len(self.lowerStations)==0:
 				self.movingStatus = 0
 			else: 
+				pass
 
 ############# TEST MAIN() ##################
 
@@ -148,3 +113,5 @@ class Elevator:
 #e = Elevator(7, 0, 2, [3,4,6], 2)
 #e.insertDst(3)
 #e.insertDst(1)
+
+

@@ -1,1 +1,1 @@
-python elevatorController.py
+python main.py

@@ -2,18 +2,12 @@ from elevator import Elevator
 from request import Request 
 from pair import Pair
 import time 
-
-# love this article: http://stackoverflow.com/questions/4915920/how-to-delete-an-item-in-a-list-if-it-exists-python
-def remove(L, value):
-  try:
-    L.remove(value)
-  except ValueError:
-    pass
+from f import rem, enqItemFreq, deqItemFreq, deleteItem
 
 class E_controller:
-	waitingRequests = [] 
 	#clk = None
 	rst = None
+	waitingRequests = [] 
 	n = None
 	f = None
 	elevators = []
@@ -25,6 +19,12 @@ class E_controller:
 			self.elevators.append(ele)
 		print ("num of floors: "+str(self.f))
 		print ("num of elevators: " + str(len(self.elevators)))
+	def __repr__(self):
+		'''TODO'''
+		result = ""
+		for i in range(len(self.elevators)):
+			result += str(self.elevators[i])
+		return result
 	def __filterElevator(self, movingStatus):
 		newElevators = []
 		for i in range(len(self.elevators)):
@@ -117,9 +117,9 @@ class E_controller:
 
 ############# MAIN() ##################
 #e_controller = E_controller(2, 7)
-e_controller = E_controller(1, 7, Elevator(7, 0, 2, [2,4,6]))
-request1_in = Request(True, 0, [9,8,1])
-request2_ex = Request(False, 3, [1, 2])
+#e_controller = E_controller(1, 7, Elevator(7, 0, 2, [2,4,6]))
+#request1_in = Request(True, 0, [9,8,1])
+#request2_ex = Request(False, 3, [1, 2])
 #e_controller.enqRequest(request1_in)
 #e_controller.enqRequest(request2_ex)
 #e_controller.updateOneClk()
