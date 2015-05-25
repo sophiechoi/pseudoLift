@@ -1,5 +1,5 @@
 class Request:
-	isInternalRequest = None #True: Internal, FalseExternal
+	isInternal = None #True: Internal, FalseExternal
 	clickedButtons = []   
 
 	''' if internal ''' 
@@ -9,10 +9,10 @@ class Request:
 	''' if external '''
 	whichFloor = None # 1,2,3,4,5,6,7, .. F
 	# clickedButtons = {2(down),1(up), 0(None??)}
-	def __init__(self, isInternalRequest, aux, clickedButtons):
-		self.isInternalRequest = isInternalRequest
-		self.clickedButtons = clickedButtons
-		if (isInternalRequest):
+	def __init__(self, isInternal, aux, clickedButtons):
+		self.isInternal = isInternal
+		self.clickedButtons = clickedButtons.sort()
+		if (isInternal):
 			self.whichElevator = aux
 			for i in range(len(clickedButtons)):
 				print " IN: clicked btn "+str(clickedButtons[i]) +"\
@@ -22,3 +22,4 @@ class Request:
 			for i in range(len(clickedButtons)):
 				print " EX: clicked btn "+str(clickedButtons[i]) +"\
 				 in floor "+str(self.whichFloor)
+

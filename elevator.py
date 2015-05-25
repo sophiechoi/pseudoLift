@@ -4,13 +4,15 @@ class Elevator:
 	curFloor = None 
 	maxFloor = None
 	destinations = None #stop by and open #>> STATIONS
-	def __init__(self, maxFloor):
+	def __init__(self, maxFloor, isOpen=0, movingStatus=0, destinations=[]):
 		self.curFloor = 1
 		self.maxFloor = maxFloor
-		self.movingStatus = 0
-		self.isOpen = 0
-		self.destinations = [] 
-		print "Elevator() init"
+		self.movingStatus = movingStatus
+		self.isOpen = isOpen
+		self.destinations = destinations 
+		print "Elevator.init() "+str(isOpen)+", "+ str(movingStatus)+", "+str(destinations)
+	def __repr__(self):
+		pass
 	def __printPos(self):
 		print ">> "+str(self.curFloor) + " th floor"
 	def __moveOneUp(self):
@@ -42,6 +44,11 @@ class Elevator:
 		self.movingStatus = 0
 		self.openDoor()
 		self.closeDoor()
+	def extendDst(self, floors):
+		destinations.extend(floors)
+	'''TODO'''
+	'''TODO'''
+	'''SHOULD DEBUG: 4,5,6,2,1 CAN OCCUR !!'''
 	def insertDst(self, newFloor):
 		print "insertDst, before: "+str(destinations)
 		if not destinations:
@@ -72,7 +79,7 @@ class Elevator:
 		print ".. start from "+str(self.curFloor) + " th floor .."
 		self.startMoving(dstFloor)
 		self.endMoving()
-	def updateOneClk(self):
+	def updateOneClk(self): # do one thing = open/close/move one-floor up or down
 		pass
 		#if destinations:
 
