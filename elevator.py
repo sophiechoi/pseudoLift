@@ -1,3 +1,9 @@
+def remove(L, value):
+  try:
+    L.remove(value)
+  except ValueError:
+    pass
+
 class Elevator:
 	isOpen = None	# 0: closed, 1: opened
 	movingStatus = None # 0: stay, 1: down, 2: up 
@@ -88,6 +94,10 @@ class Elevator:
 			print "lower"
 			self.__insertInLowerStations(newFloor)
 		self.__printStations("after: ")
+	def cancelDst(self, oldFloor):
+		'''TODO: cancel external dst '''
+		remove(self.upperStations, oldFloor)
+		remove(self.lowerStations, oldFloor)
 	def openDoor(self):
 		isOpen = 1
 		print ".. door opened .."
@@ -114,4 +124,8 @@ class Elevator:
 #e = Elevator(7, 0, 2, [3,4,6], 2)
 #e.insertDst(3)
 #e.insertDst(1)
-
+E= 1
+print E
+e= 2
+print e
+print E

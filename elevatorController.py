@@ -10,6 +10,8 @@ def remove(L, value):
     pass
 
 class E_controller:
+	'''TODO'''
+	waitingRequests = [] 
 	#clk = None
 	#rst = None
 	n = None
@@ -24,50 +26,82 @@ class E_controller:
 			self.elevators.append(ele)
 		print ("num of floors: "+str(self.f))
 		print ("num of elevators: " + str(len(self.elevators)))
-	def pickElevator(self):
-		#if up button
-			#movingStatus == 2인 중에, 나랑 제일 가까운 것.
-			#없으면, 그외중 가까운것
+	def __filterElevator(self, movingStatus):
+		newElevators = []
+		for i in range(len(self.elevators)):
+			if self.elevators[i].movingStatus == movingStatus or self.elevators[i].movingStatus == 0:
+				newElevators.append(self.elevators[i])
+		return newElevators
+	def __pickClosestElevator(self, elevators, whichFloor):
+		closest = None
+		minDistance = 10
+		for i in range(len(elevators)):
+			if abs(elevators[i].currFloor - whichFloor) < minDistance:
+				minDistance = abs(elevators[i].currFloor - whichFloor)
+				closest = elevators[i]
+		return i
+	'''TODO'''
+	def pickElevator(self, whichFloor, upOrDownBtn):
+		if upOrDownBtn == 1: #if UP btn 
+			# filter movingUp or Staying elevators
+			filteredElevators = self.__filterElevator(2)
+			# if not, use movingDown elevators
+			if not filteredElevators :
+				filteredElevators = self.elevators
+			self.__pickClosestElevator(filteredElevators, whichFloor)
+		elif upOrDownBtn ==2: #if DOWN btn
+			# filter movingDown or Staying elevators
+			filteredElevators = self.__filterElevator(1)
+			# if not, use movingUp elevators
+			if not filteredElevators :
+				filteredElevators = self.elevators
+			self.__pickClosestElevator(filteredElevators, whichFloor)
+		### WHAT ABOUT UNHANDLED_BTNS? leftovers..
 		#elif down button
-			#movingStatus == 1인 중에, 나랑 제일 가까운 것.
-			#없으면, 그외중 가까운것
+			#filter movingStatus == 1, closest
+			#else, closest
 		#elif up & down button
-			#둘다 0이거나, movingStatus=2,1이 각각 하나씩 있으면, 각각 하나씩 
-			#movingStatus=2만 있으면, 먼저 올라오는애를 up에, 나중을 down에
+			#both 0,or each one movingStatus=2,1, then each one
+			#if both movingStatus=2, closest(=?first) one UP, second one to DOWN
 			#movingS
 		pass
 	def enqRequest(self, request):
 		if request.isInternal : 
-			''' handle OPEN/CLOSE buttons '''
-			# OPEN/CLOSE buttons are only effective when elevators are STOPPED.
-			i 	 = request.whichElevator
-			btns = request.clickedButtons
-			e    = elevators[i]
-			if e.movingStatus==0 : 
-				if (e.isOpen==1 and btns.contains(2)):
-					e.closeDoor()
-				elif (e.isOpen==0 and btns.contains(1)):
-					e.openDoor()
-			remove(btns, 1)
-			remove(btns, 2)
-			'''ignore if same floor with currFloor & ignore already in stationslist'''
-			
-			'''handle 1~7 FLOOR buttons''' # elevator is picked already!
-			if e.movingStatus == 2 or movingStatus == 1:
-				for j in range(len(btns)): 
-					e.insertDst(btns[j])
-			elif e.movingStatus == 0:
-				pass					
+			i 	= request.whichElevator
+			btn = request.btn
+			e   = elevators[i]
+			if (btn == 1 or btn == 2): #handle OPEN/CLOSE button
+				if 	e.movingStatus==0:
+					if   (e.isOpen==1 and btn==2):
+						e.closeDoor()
+					elif (e.isOpen==0 and btn==1):
+						e.openDoor()
+				else:
+					pass
+			else: #handle NUM_OF_FLOOR(1~7) button			 
+				newStation = btn - 2
+				if (newStation == currFloor):
+					#ignore if same floor with currFloor
+					pass
+				elif newStation in e.upperStations.extend(e.lowerStations):
+					#ignore if already in stationslist
+					pass
+				else:
+					e.insertDst(btn)
 		else :
+			'''TODO'''
 			'''handle UP/DOWN buttons '''
-			# ee = self.pickElevator()
-			#	for j in range(len(btns)): 
-			#		e.insertDst(btns[j])
-			pass
+			''' put in LEFT OVERS '''
+			''' If DONE, remove from LEFT_OVER list'''
+			waitingRequests.append(request)
+			ii = request.whichFloor
+			ee = self.pickElevator(ii, btn)
+			request.chosenElevator(ee)
+			ee.insertDst(btn)
 	def updateOneClk(self):
-		'''TODO'''
 		for i in range(len(self.elevators)):
 			self.elevators[i].updateOneClk()
+		print "status: "
 		time.sleep(1)
 
 
