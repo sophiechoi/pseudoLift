@@ -22,7 +22,7 @@ print "\n"
 
 while(True):
 	sys.stdout.flush()
-	print "------------------------------------"
+	print "-------------------------------------------"
 	userInput = raw_input('Enter your input: ')
 	if len(userInput) > 1:
 		print ">> handle input"
@@ -43,4 +43,7 @@ while(True):
 		e_controller.updateOneClk()
 		print ">> after input: "
 		print e_controller
-		time.sleep(1)
+		time.sleep(0.5)
+
+
+

@@ -11,6 +11,8 @@ I_Btns  = enum(NNONE=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=
 sMoving = enum(STAY=0, DOWN=1, UP=2) #duplicated
 sOpen   = enum(CLOSED=0, OPENED=1) #duplicated
 
+extraDots ="                                           ........."
+
 class E_controller:
 	n = None
 	f = None
@@ -23,7 +25,7 @@ class E_controller:
 		self.n = numElevators
 		self.f = numFloors 
 		for i in range(self.n):
-			e = Elevator(self.f)
+			e = Elevator(i, self.f)
 			self.elevators.append(e)
 		print ("num of floors: "+str(self.f)+", num of elevators: " + str(len(self.elevators)))
 
@@ -37,34 +39,52 @@ class E_controller:
 		return result
 
 	def __filterElevator(self, movingStatus):
+		print "__filterElevator()"
 		newElevators = []
 		for i in range(len(self.elevators)):
 			mStatus = self.elevators[i].movingStatus
 			if mStatus == movingStatus or mStatus == 0:
 				newElevators.append(self.elevators[i])
+		print newElevators
 		return newElevators
 
-	def __pickClosestElevator(self, elevators, whichN):
-		closest = None
-		minDistance = len(self.elevators) + 1
-		es = self.elevators
-		for i in range(len(es)):
-			if abs(es[i].curFloor - whichN) < minDistance:
-				minDistance = abs(es[i].curFloor - whichN) #abs?
-				closest = es[i]
-		return i
+	def __pickClosestElevator(self, filteredElevators, whichN):
+		print "__pickClosestElevator(), "+str(whichN)
+		closestIndex = None
+		minDiff = self.f + 1
+		print "min: "+str(minDiff)
+		es = filteredElevators
+		for i in range(0, len(es)):
+			print "i:"+str(i)
+			print "cur: "+str(es[i].curFloor)
+			diff = abs(es[i].curFloor - whichN)
+			print "diff: "+str(diff)
+			if diff < minDiff:
+				minDiff = diff #TODO: abs?
+				print "min: "+str(minDiff)
+				closestIndex = i
+		print closestIndex
+		return closestIndex
 
+	'''TODO: DEBUG'''
 	def __pickElevator(self, whichN, upOrDownBtn):
+		print "__pickElevator()"
 		if upOrDownBtn==E_Btns.UP: 
+			print "case up"
 			filteredElevators = self.__filterElevator(sMoving.UP) #UP & STAY
 			if not filteredElevators :
+				print "not"
 				filteredElevators = self.elevators
+			print "len: "+str(len(filteredElevators))
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 		elif upOrDownBtn==E_Btns.DOWN:
+			print "case down"
 			filteredElevators = self.__filterElevator(sMoving.DOWN) #DOWN & STAY
 			if not filteredElevators :
+				print "not"
 				filteredElevators = self.elevators
+			print "len: "+str(len(filteredElevators))
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 	def enqRequest(self, request):
@@ -75,6 +95,7 @@ class E_controller:
 		if request.isI : 
 			#print "isI"
 			e   = self.elevators[i]
+			'''TODO: seperate enq and operate'''
 			if (btn==I_Btns.OPEN or btn==I_Btns.CLOSE):
 				if 	e.movingStatus==sMoving.STAY:
 					if   (e.isOpen==sOpen.OPENED and btn==I_Btns.CLOSE):
@@ -100,6 +121,7 @@ class E_controller:
 			#print "insert call(2)"
 			e.insertDst(newStation)
 
+	'''TODO'''
 	def enqRequests(self, requests):
 		pass
 

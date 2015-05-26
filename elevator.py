@@ -7,6 +7,7 @@ sMoving = enum(STAY=0, DOWN=1, UP=2)
 sOpen = enum(CLOSED=0, OPENED=1)
 sFloor = enum(F1=1, F2=2, F3=3, F4=4, F5=5, F6=6, F7=7)
 
+
 class Elevator:
 	isOpen = None	
 	movingStatus = None 
@@ -14,20 +15,26 @@ class Elevator:
 	maxFloor = None
 	upperStations = None
 	lowerStations = None
-	def __init__(self, maxFloor=7, isOpen=0, movingStatus=0, upperStations=[], curFloor = 1):
+	index = None
+	extraDots = None
+	def __init__(self, index, maxFloor=7, isOpen=0, movingStatus=0, upperStations=[], curFloor = 1):
 		print "Elevator.init()"
+		self.index = index
 		self.curFloor = curFloor
 		self.maxFloor = maxFloor
 		self.movingStatus = movingStatus
 		self.isOpen = isOpen
 		self.upperStations = {}
 		self.lowerStations = {}
+		self.extraDots ="                                                            E["+str(self.index)+"] "
+
 		for i in range(len(upperStations)):
 			enqItemFreq(self.upperStations, upperStations[i])
 	def __repr__(self):
-		return "ELEVATOR STATE("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
+		return "E["+str(self.index)+"]("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
 	def __str__(self):
-		return "ELEVATOR STATE("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
+		return "E["+str(self.index)+"]("+"curFloor: "+str(self.curFloor)+", isOpen: "+str(self.isOpen)+", movingStatus: "+str(self.movingStatus)+")\n"
+	
 	def __printPos(self):
 		print ">> "+str(self.curFloor) + " th floor"
 	def __printStations(self, msg):
@@ -35,14 +42,15 @@ class Elevator:
 			print msg+str(self.upperStations)+"/"+str(self.lowerStations)
 		elif self.movingStatus==sMoving.DOWN:
 			print msg+str(self.lowerStations)+"/"+str(self.upperStations)
+
 	def __moveOneUp(self):
 		if (self.curFloor < self.maxFloor):
 			self.curFloor += 1
-			print ".. moving up .. to "+str(self.curFloor)
+			print self.extraDots+".. moving up .. to "+str(self.curFloor)
 	def __moveOneDown(self):
 		if (self.curFloor > 1):
 			self.curFloor -= 1
-			print ".. moving down ..to "+str(self.curFloor)
+			print self.extraDots+".. moving down ..to "+str(self.curFloor)
 	def __checkAndGoOneUp(self):
 		ups = self.upperStations
 		self.movingStatus = sMoving.UP
@@ -92,26 +100,27 @@ class Elevator:
 
 	def insertDst(self, newFloor):
 		#print "insertDst()"
-		self.__printStations(".. before: ")
+		self.__printStations(self.extraDots+".. before: ")
 		if newFloor > self.curFloor:
 			if self.movingStatus==sMoving.STAY: #need?
 				self.movingStatus =sMoving.UP #need?
-			print ".. added upperStation .."
+			print self.extraDots+".. added upperStation .."
 			enqItemFreq(self.upperStations, newFloor)
 		elif newFloor < self.curFloor:
 			if self.movingStatus==sMoving.STAY: #need?
 				self.movingStatus =sMoving.DOWN #need?
-			print ".. added lowerStation.."
+			print self.extraDots+".. added lowerStation.."
 			enqItemFreq(self.lowerStations, newFloor)
-		self.__printStations(".. after: ")
+		self.__printStations(self.extraDots+".. after: ")
+
 	def openDoor(self):
 		isOpen = sOpen.OPENED
-		print ".. door opened .."
+		print self.extraDots+".. door opened .."
 		time.sleep(1)
 		self.closeDoor()
 	def closeDoor(self):
 		isOpen = sOpen.CLOSED
-		print ".. door closed .."
+		print self.extraDots+".. door closed .."
 
 ############# TEST MAIN() ##################
 
