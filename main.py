@@ -22,10 +22,10 @@ print "\n"
 
 while(True):
 	sys.stdout.flush()
-	print "-------------------------------------------"
+	print "-----------------------------------------------"
 	userInput = raw_input('Enter your input: ')
 	if len(userInput) > 1:
-		print ">> handle input"
+		print ">> HANDLE INPUT "
 		# userInput ex) I 0 2 (open )
 		# userInput ex) I 0 5 (go 3th floor)
 		# userInput ex) E 6 1 (6th floor, down btn)
@@ -37,7 +37,7 @@ while(True):
 		print ">> after input: "
 		print e_controller
 	else:
-		print ">> update next status"
+		print ">> UPDATE NEXT STATUS"
 		print ">> before input: "
 		print e_controller
 		e_controller.updateOneClk()

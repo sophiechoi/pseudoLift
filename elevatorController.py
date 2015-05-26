@@ -105,12 +105,14 @@ class E_controller:
 			#print "insert call(2)"
 			e.insertDst(newStation)
 
-	'''TODO'''
+	'''TODO: keep and store multiple requests'''
 	def enqRequests(self, requests):
 		pass
 
+	'''(TODO: do first request, from multiple requests)'''
 	def updateOneClk(self):
 		#If waitingRequest is achieved unintentionally, CANCEL it.
+		'''CHECK IF IT WORKS'''
 		pairs = [] #pair = (curFloors, movingStatus)
 		es = self.elevators
 		for i in range(len(es)):

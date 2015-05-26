@@ -44,10 +44,12 @@ class Elevator:
 			print msg+str(self.lowerStations)+"/"+str(self.upperStations)
 
 	def __moveOneUp(self):
+		self.movingStatus == sMoving.UP # need?
 		if (self.curFloor < self.maxFloor):
 			self.curFloor += 1
 			print self.extraDots+".. moving up .. to "+str(self.curFloor)
 	def __moveOneDown(self):
+		self.movingStatus == sMoving.DOWN # need?
 		if (self.curFloor > 1):
 			self.curFloor -= 1
 			print self.extraDots+".. moving down ..to "+str(self.curFloor)
@@ -99,16 +101,16 @@ class Elevator:
 				self.__checkAndGoOneDown()
 
 	def insertDst(self, newFloor):
-		#print "insertDst()"
+		print "insertDst()"
 		self.__printStations(self.extraDots+".. before: ")
 		if newFloor > self.curFloor:
-			if self.movingStatus==sMoving.STAY: #need?
-				self.movingStatus =sMoving.UP #need?
+			if len(self.upperStations)==0 and len(self.lowerStations)==0:
+				self.movingStatus = sMoving.UP
 			print self.extraDots+".. added upperStation .."
 			enqItemFreq(self.upperStations, newFloor)
 		elif newFloor < self.curFloor:
-			if self.movingStatus==sMoving.STAY: #need?
-				self.movingStatus =sMoving.DOWN #need?
+			if len(self.upperStations)==0 and len(self.lowerStations)==0:
+				self.movingStatus = sMoving.DOWN
 			print self.extraDots+".. added lowerStation.."
 			enqItemFreq(self.lowerStations, newFloor)
 		self.__printStations(self.extraDots+".. after: ")
