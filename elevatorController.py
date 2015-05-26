@@ -37,16 +37,24 @@ class E_controller:
 		return result
 
 	def __filterElevator(self, movingStatus):
+		'''TODO: change a lot'''
 		print "__filterElevator()"
 		newElevators = []
 		for i in range(len(self.elevators)):
 			mStatus = self.elevators[i].movingStatus
-			if mStatus == movingStatus or mStatus == 0:
-				newElevators.append(self.elevators[i])
+			if mStatus == movingStatus:
+				if movingStatus == sMoving.UP and self.elevators[i].curFloor < newFloor:
+					newElevators.append(self.elevators[i])
+				elif movingStatus ==sMoving.DOWN and self.elevators[i].curFloor > newFloor:
+					newElevators.append(self.elevators[i])
+			elif mStatus == 0:
+					newElevators.append(self.elevators[i])
+
 		print newElevators
 		return newElevators
 
 	def __pickClosestElevator(self, filteredElevators, whichN):
+		'''TODO: change a lot'''
 		print "__pickClosestElevator(), "+str(whichN)
 		closestIndex = None
 		minDiff = self.f + 1
@@ -60,13 +68,13 @@ class E_controller:
 
 	def __pickElevator(self, whichN, upOrDownBtn):
 		if upOrDownBtn==E_Btns.UP: 
-			filteredElevators = self.__filterElevator(sMoving.UP) #UP & STAY
+			filteredElevators = self.__filterElevator(sMoving.UP, newFloor) #UP & STAY
 			if not filteredElevators :
 				filteredElevators = self.elevators
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 		elif upOrDownBtn==E_Btns.DOWN:
-			filteredElevators = self.__filterElevator(sMoving.DOWN) #DOWN & STAY
+			filteredElevators = self.__filterElevator(sMoving.DOWN, newFloor) #DOWN & STAY
 			if not filteredElevators :
 				filteredElevators = self.elevators
 			return self.__pickClosestElevator(filteredElevators, whichN)

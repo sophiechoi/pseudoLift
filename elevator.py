@@ -1,4 +1,4 @@
-from f import rem, enqItemFreq, deqItemFreq, deleteItem
+from f import rem, enqItemFreq, deqItemFreq, deleteItem, findLowestFloor, findHighestFloor
 from g import enum
 import time 
 
@@ -56,10 +56,14 @@ class Elevator:
 	def __checkAndGoOneUp(self):
 		ups = self.upperStations
 		self.movingStatus = sMoving.UP
+		'''
 		sortedList = []
 		for key in sorted(ups.iterkeys()):
 			sortedList.append(key)
 		dst = sortedList[0]
+		'''
+		dst = findLowestFloor(ups)
+
 		if (dst == self.curFloor):
 			deleteItem(ups, dst)
 			self.movingStatus = sMoving.STAY
@@ -71,10 +75,14 @@ class Elevator:
 	def __checkAndGoOneDown(self):
 		lws = self.lowerStations
 		self.movingStatus = sMoving.DOWN
+		'''
 		sortedList = []
 		for key in sorted(lws.iterkeys()):
 			sortedList.append(key)
 		dst = sortedList[-1]
+		'''
+		dst = findHighestFloor(lws)
+
 		if (dst == self.curFloor):
 			deleteItem(lws, dst)
 			self.movingStatus = sMoving.STAY

@@ -1,6 +1,6 @@
 from request import Request 
 
-
+'''LIST'''
 def rem(lst, value):
 	try:
   		lst.remove(value)
@@ -14,6 +14,10 @@ def rem(lst, value):
 #rem(list1, 2)
 #print list1 
 
+'''DICTIONARIES'''
+
+
+#########ADD AND DEL
 def parseAndGenRequest(userInput):
 	userInputs = userInput.split(" ")
 	isInternal = (True if userInputs[0]=="I" else False)
@@ -54,7 +58,37 @@ def deleteItem(D, item):
 	#print D
 	#print "\n"
 
-#TEST
+#########SEARCH
+def findLowestFloor(D):
+	print "findLowestFloor()"
+	sortedList = []
+	for key in sorted(D.iterkeys()):
+		sortedList.append(key)
+	lowest = sortedList[0]
+	print lowest
+	return lowest
+
+def findHighestFloor(D):
+	print "findHighestFloor()"
+	sortedList = []
+	for key in sorted(D.iterkeys()):
+		sortedList.append(key)
+	highest = sortedList[-1]
+	print highest 
+	return highest
+
+# TEST SEARCH
+'''
+d = {}
+enqItemFreq(d, 10)
+enqItemFreq(d, 2)
+enqItemFreq(d, 9)
+print "lowest: "
+print findLowestFloor(d)
+print findHighestFloor(d)
+'''
+
+#TEST INSERT/DELETE
 '''
 d = {}
 enqItemFreq(d, 'aaa')
