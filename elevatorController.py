@@ -11,8 +11,6 @@ I_Btns  = enum(NNONE=0, CLOSE=1, OPEN=2, F1=3, F2=4, F3=5, F4=6, F5=7, F6=8, F7=
 sMoving = enum(STAY=0, DOWN=1, UP=2) #duplicated
 sOpen   = enum(CLOSED=0, OPENED=1) #duplicated
 
-extraDots ="                                           ........."
-
 class E_controller:
 	n = None
 	f = None
@@ -52,39 +50,25 @@ class E_controller:
 		print "__pickClosestElevator(), "+str(whichN)
 		closestIndex = None
 		minDiff = self.f + 1
-		print "min: "+str(minDiff)
 		es = filteredElevators
 		for i in range(0, len(es)):
-			print "i:"+str(i)
-			print "cur: "+str(es[i].curFloor)
 			diff = abs(es[i].curFloor - whichN)
-			print "diff: "+str(diff)
 			if diff < minDiff:
 				minDiff = diff #TODO: abs?
-				print "min: "+str(minDiff)
 				closestIndex = i
-		print closestIndex
 		return closestIndex
 
-	'''TODO: DEBUG'''
 	def __pickElevator(self, whichN, upOrDownBtn):
-		print "__pickElevator()"
 		if upOrDownBtn==E_Btns.UP: 
-			print "case up"
 			filteredElevators = self.__filterElevator(sMoving.UP) #UP & STAY
 			if not filteredElevators :
-				print "not"
 				filteredElevators = self.elevators
-			print "len: "+str(len(filteredElevators))
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 		elif upOrDownBtn==E_Btns.DOWN:
-			print "case down"
 			filteredElevators = self.__filterElevator(sMoving.DOWN) #DOWN & STAY
 			if not filteredElevators :
-				print "not"
 				filteredElevators = self.elevators
-			print "len: "+str(len(filteredElevators))
 			return self.__pickClosestElevator(filteredElevators, whichN)
 
 	def enqRequest(self, request):
